@@ -1,0 +1,196 @@
+{
+  "metadata": {
+    "title": "Electricieni.md - Servicii Electrice Profesionale în Moldova",
+    "description": "Servicii electrice profesionale în Moldova. Instalații electrice, mentenanță și reparații pentru case și afaceri.",
+    "keywords": "electrician, instalații electrice, reparații electrice, electricieni moldova, servicii electrice"
+  },
+  "navigation": {
+    "home": "Acasă",
+    "services": "Servicii",
+    "about": "Despre noi",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Servicii Electrice Profesionale",
+    "subtitle": "Soluții electrice sigure și de încredere pentru casa și afacerea dumneavoastră",
+    "cta": "Contactați-ne"
+  },
+  "services": {
+    "title": "Serviciile Noastre",
+    "subtitle": "Oferim o gamă completă de servicii electrice pentru clienți rezidențiali și comerciali",
+    "learnMore": "Află mai multe",
+    "residential": {
+      "title": "Instalații Rezidențiale",
+      "description": "Instalații electrice complete pentru case și apartamente",
+      "features": [
+        "Instalații electrice noi",
+        "Modernizarea instalațiilor existente",
+        "Instalare prize și întrerupătoare",
+        "Iluminat interior și exterior",
+        "Instalare panouri electrice",
+        "Protecție la supratensiune"
+      ]
+    },
+    "commercial": {
+      "title": "Instalații Comerciale",
+      "description": "Soluții electrice pentru spații comerciale și birouri",
+      "features": [
+        "Proiectare și instalare sisteme electrice",
+        "Iluminat comercial",
+        "Sisteme de backup",
+        "Rețele electrice industriale",
+        "Automatizări",
+        "Mentenanță preventivă"
+      ]
+    },
+    "maintenance": {
+      "title": "Mentenanță",
+      "description": "Servicii de întreținere și reparații electrice",
+      "features": [
+        "Inspecții periodice",
+        "Depanare defecțiuni",
+        "Optimizare consum energie",
+        "Înlocuire componente",
+        "Curățare și întreținere",
+        "Rapoarte tehnice"
+      ]
+    },
+    "emergency": {
+      "title": "Servicii de Urgență",
+      "description": "Disponibili 24/7 pentru urgențe electrice",
+      "features": [
+        "Răspuns rapid 24/7",
+        "Reparații de urgență",
+        "Diagnosticare probleme",
+        "Înlocuire componente defecte",
+        "Restabilire alimentare",
+        "Consultanță telefonică"
+      ]
+    }
+  },
+  "pricing": {
+    "title": "Pachete de Servicii",
+    "subtitle": "Alegeți pachetul care se potrivește nevoilor dumneavoastră",
+    "packages": [
+      {
+        "name": "Basic",
+        "description": "Pentru lucrări electrice simple și reparații minore",
+        "price": "De la 300 MDL",
+        "features": [
+          "Diagnosticare probleme",
+          "Reparații minore",
+          "Înlocuire prize și întrerupătoare",
+          "Consultanță telefonică gratuită"
+        ]
+      },
+      {
+        "name": "Standard",
+        "description": "Pentru instalații și reparații complexe",
+        "price": "De la 1000 MDL",
+        "features": [
+          "Toate serviciile din pachetul Basic",
+          "Instalații electrice noi",
+          "Modernizare tablouri electrice",
+          "Iluminat interior și exterior",
+          "Garanție extinsă"
+        ]
+      },
+      {
+        "name": "Premium",
+        "description": "Pentru proiecte complete și soluții la cheie",
+        "price": "De la 5000 MDL",
+        "features": [
+          "Toate serviciile din pachetul Standard",
+          "Proiectare instalații electrice",
+          "Automatizări",
+          "Sisteme de backup",
+          "Mentenanță preventivă",
+          "Suport prioritar 24/7"
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Ce Spun Clienții Noștri",
+    "subtitle": "Experiențele clienților care au ales serviciile noastre",
+    "items": [
+      {
+        "text": "Am avut nevoie de o modernizare completă a instalației electrice din casă. Echipa de la Electricieni.md a făcut o treabă excelentă, totul a fost făcut profesionist și la timp.",
+        "author": "Ion Popescu",
+        "role": "Proprietar casă"
+      },
+      {
+        "text": "Serviciu excelent și rapid pentru urgențele electrice. Au venit în mai puțin de o oră și au rezolvat problema eficient.",
+        "author": "Maria Ionescu",
+        "role": "Manager restaurant"
+      },
+      {
+        "text": "Am colaborat pentru instalația electrică a unui nou spațiu comercial. Totul a fost realizat la standarde înalte și cu atenție la detalii.",
+        "author": "Andrei Rusu",
+        "role": "Antreprenor"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contactați-ne",
+    "name": "Nume",
+    "email": "Email",
+    "phone": "Telefon",
+    "message": "Mesaj",
+    "submit": "Trimite",
+    "success": "Mesajul a fost trimis cu succes!",
+    "error": "A apărut o eroare. Vă rugăm încercați din nou."
+  },
+  "about": {
+    "title": "Despre Noi",
+    "subtitle": "Experiență și Profesionalism în Servicii Electrice",
+    "description": "Cu peste 10 ani de experiență în domeniul instalațiilor electrice, oferim servicii de cea mai înaltă calitate pentru clienții noștri din Moldova. Echipa noastră de electricieni calificați este dedicată siguranței și satisfacției clienților.",
+    "values": {
+      "title": "Valorile Noastre",
+      "quality": {
+        "title": "Calitate",
+        "description": "Folosim doar materiale de înaltă calitate și respectăm cele mai înalte standarde"
+      },
+      "safety": {
+        "title": "Siguranță",
+        "description": "Siguranța este prioritatea noastră numărul unu în toate proiectele"
+      },
+      "reliability": {
+        "title": "Încredere",
+        "description": "Suntem punctuali și ne respectăm angajamentele față de clienți"
+      }
+    }
+  },
+  "footer": {
+    "rights": "Toate drepturile rezervate"
+  },
+  "cta": {
+    "title": "Aveți nevoie de un electrician profesionist?",
+    "description": "Suntem disponibili 24/7 pentru orice tip de lucrare electrică. Contactați-ne pentru o evaluare gratuită."
+  },
+  "faq": {
+    "title": "Întrebări Frecvente",
+    "items": [
+      {
+        "question": "Ce zone acoperă serviciile voastre?",
+        "answer": "Oferim servicii în Chișinău și împrejurimi, cu posibilitatea de deplasare în toată Moldova pentru proiecte mai mari."
+      },
+      {
+        "question": "Cât durează până ajungeți în caz de urgență?",
+        "answer": "Pentru urgențe, timpul nostru mediu de răspuns este de 30-60 de minute în Chișinău. Pentru alte zone, timpul poate varia în funcție de distanță."
+      },
+      {
+        "question": "Oferiți garanție pentru lucrări?",
+        "answer": "Da, toate lucrările noastre vin cu o garanție standard de 12 luni. Pentru pachetele Premium, oferim garanție extinsă de până la 24 de luni."
+      },
+      {
+        "question": "Care sunt metodele de plată acceptate?",
+        "answer": "Acceptăm plăți în numerar, prin transfer bancar și prin card bancar. Pentru proiecte mai mari, oferim și posibilitatea de plată în rate."
+      },
+      {
+        "question": "Este nevoie să fiu acasă pe toată durata lucrării?",
+        "answer": "Nu este necesar să fiți prezent pe toată durata lucrării. După evaluarea inițială și stabilirea detaliilor, echipa noastră poate lucra independent."
+      }
+    ]
+  }
+} 
