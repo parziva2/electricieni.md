@@ -68,11 +68,17 @@ export async function generateMetadata(
   }
 }
 
-export default async function RootLayout(props: {
+type Props = {
   children: React.ReactNode;
-  params: { locale: string };
-}) {
-  const locale = props.params.locale as Locale;
+  params: {
+    locale: string;
+  };
+};
+
+export default async function RootLayout({
+  children,
+  params: { locale },
+}: Props) {
   await unstable_setRequestLocale(locale);
 
   if (!locales.includes(locale as Locale)) {
@@ -90,7 +96,7 @@ export default async function RootLayout(props: {
               <Navigation />
               <main className="py-10">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                  {props.children}
+                  {children}
                 </div>
               </main>
               <Footer />
