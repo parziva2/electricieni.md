@@ -68,20 +68,16 @@ export async function generateMetadata(
   }
 }
 
-type Props = {
+interface LayoutProps {
   children: React.ReactNode;
-  params: {
-    locale: string;
-  };
-};
+  params: { locale: Locale };
+}
 
-export default async function RootLayout({
-  children,
-  params: { locale },
-}: Props) {
+export default async function RootLayout({ children, params }: LayoutProps) {
+  const { locale } = params;
   await unstable_setRequestLocale(locale);
 
-  if (!locales.includes(locale as Locale)) {
+  if (!locales.includes(locale)) {
     notFound();
   }
 
