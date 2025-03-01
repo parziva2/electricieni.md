@@ -8,12 +8,9 @@ import {
   BuildingOfficeIcon,
   WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
-import { usePathname } from 'next/navigation';
 
 export default function ServiceShowcase() {
   const t = useTranslations('services');
-  const pathname = usePathname();
-  const currentLocale = pathname.split('/')[1];
 
   const services = [
     {

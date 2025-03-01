@@ -6,7 +6,7 @@ export const defaultLocale = 'ro';
 
 export default getRequestConfig(async ({ locale }) => {
   // Validate locale
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale as typeof locales[number])) {
     notFound();
   }
 

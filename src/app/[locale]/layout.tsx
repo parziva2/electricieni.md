@@ -10,6 +10,8 @@ import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
+type Locale = typeof locales[number];
+
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
@@ -17,10 +19,10 @@ export function generateStaticParams() {
 export async function generateMetadata(
   props: { params: { locale: string } }
 ): Promise<Metadata> {
-  const locale = props.params.locale;
+  const locale = props.params.locale as Locale;
   await unstable_setRequestLocale(locale);
 
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale as Locale)) {
     notFound();
   }
 
@@ -58,7 +60,7 @@ export async function generateMetadata(
         follow: true,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'Electricieni.md',
       description: 'Professional electrical services in Moldova',
@@ -70,10 +72,10 @@ export default async function RootLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const locale = props.params.locale;
+  const locale = props.params.locale as Locale;
   await unstable_setRequestLocale(locale);
 
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale as Locale)) {
     notFound();
   }
 
@@ -97,7 +99,7 @@ export default async function RootLayout(props: {
         </body>
       </html>
     );
-  } catch (error) {
+  } catch {
     notFound();
   }
 } 
