@@ -16,7 +16,7 @@ export function generateStaticParams() {
 async function getMessages(locale: Locale) {
   try {
     return (await import(`@/i18n/locales/${locale}.json`)).default;
-  } catch (error) {
+  } catch {
     notFound();
   }
 }
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
         follow: true,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'Electricieni.md',
       description: 'Professional electrical services in Moldova',
