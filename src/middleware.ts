@@ -6,6 +6,8 @@ export default createMiddleware({
   defaultLocale,
   locales,
   localePrefix: 'always',
+  // This configures the locale detection
+  localeDetection: true,
   // Add default locale to pathname
   pathnames: {
     '/': '/',
@@ -16,6 +18,6 @@ export default createMiddleware({
 });
 
 export const config = {
-  // Skip all paths that should not be internationalized
+  // Match only internationalized pathnames
   matcher: ['/', '/(ro|ru)/:path*']
 }; 
