@@ -20,10 +20,11 @@ export const {Link, redirect, usePathname, useRouter} = createSharedPathnamesNav
 
 // Export a request config that next-intl will use
 export default getRequestConfig(async ({requestLocale}) => {
-  const locale = await requestLocale || defaultLocale;
-  const messages = await getMessages(locale);
+  const locale = await requestLocale;
+  const messages = await getMessages(locale || defaultLocale);
   
   return {
+    locale: locale || defaultLocale,
     messages,
     timeZone: 'Europe/Chisinau',
     now: new Date(),
