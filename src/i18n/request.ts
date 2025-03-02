@@ -2,12 +2,15 @@ import { getRequestConfig } from 'next-intl/server';
 import { locales, type Locale } from './config';
 
 export default getRequestConfig(async ({ locale }) => {
-  if (!locales.includes(locale as Locale)) {
-    throw new Error(`Locale ${locale} is not supported`);
+  // Validate the locale
+  const resolvedLocale = locale || 'ro';
+  
+  if (!locales.includes(resolvedLocale as Locale)) {
+    throw new Error(`Locale ${resolvedLocale} is not supported`);
   }
 
   return {
-    messages: (await import(`./locales/${locale}.json`)).default,
+    messages: (await import(`./locales/${resolvedLocale}.json`)).default,
     timeZone: 'Europe/Chisinau',
     now: new Date(),
     defaultTranslationValues: {
