@@ -8,6 +8,12 @@ export default createMiddleware({
   localePrefix: 'always'
 });
 
+// Specify which paths should be handled by the middleware
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+  matcher: [
+    // Match all paths except api, _next, static files, etc.
+    '/((?!api|_next|_vercel|.*\\..*).*)',
+    // Also match the root path
+    '/'
+  ]
 }; 
