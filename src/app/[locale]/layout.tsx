@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
-import { NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider, useMessages } from 'next-intl';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { locales, type Locale } from '@/i18n/config';
