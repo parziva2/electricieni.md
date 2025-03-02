@@ -1,5 +1,5 @@
 import createMiddleware from 'next-intl/middleware';
-import { locales, defaultLocale } from './i18n/config';
+import {locales, defaultLocale, pathnames} from './i18n/config';
 
 // This is a more stable middleware configuration
 export default createMiddleware({
@@ -12,12 +12,7 @@ export default createMiddleware({
   // Enable locale detection
   localeDetection: true,
   // Define all the pathnames that should be handled
-  pathnames: {
-    '/': '/',
-    '/services': '/services',
-    '/about': '/about',
-    '/contact': '/contact'
-  }
+  pathnames,
 });
 
 // Match all paths except static files, api routes, etc

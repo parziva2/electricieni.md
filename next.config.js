@@ -12,4 +12,7 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig); 
+module.exports = withNextIntl({
+  // Other Next.js config options
+  ...nextConfig,
+}); 

@@ -6,27 +6,24 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { locales, type Locale } from '@/i18n/config';
 import { getMessages } from '@/i18n';
-import ErrorBoundary from '@/components/ErrorBoundary';
 import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
+// Generate static params for all locales
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+// Generate metadata for the page
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
-  if (!locales.includes(locale)) {
-    notFound();
-  }
+  if (!locales.includes(locale)) notFound();
 
-  // Set the locale for the request
   await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
   
   try {
     const t = await getTranslations({ locale, messages, namespace: 'metadata' });
-
     return {
       title: t('title'),
       description: t('description'),
@@ -67,16 +64,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params: { locale }
 }: {
   children: React.ReactNode;
   params: { locale: Locale };
 }) {
-  if (!locales.includes(locale)) {
-    notFound();
-  }
+  if (!locales.includes(locale)) notFound();
 
-  // Set the locale for the request
   await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
 
@@ -85,7 +79,7 @@ export default async function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <NextIntlClientProvider 
           locale={locale} 
-          messages={messages} 
+          messages={messages}
           timeZone="Europe/Chisinau"
           now={new Date()}
           formats={{
@@ -95,20 +89,24 @@ export default async function RootLayout({
                 month: 'short',
                 year: 'numeric'
               }
+            },
+            number: {
+              currency: {
+                style: 'currency',
+                currency: 'MDL'
+              }
             }
           }}
         >
-          <ErrorBoundary>
-            <div className="min-h-screen bg-gray-100">
-              <Navigation />
-              <main className="py-10">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                  {children}
-                </div>
-              </main>
-              <Footer />
-            </div>
-          </ErrorBoundary>
+          <div className="min-h-screen bg-gray-100">
+            <Navigation />
+            <main className="py-10">
+              <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                {children}
+              </div>
+            </main>
+            <Footer />
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>

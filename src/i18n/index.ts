@@ -3,7 +3,7 @@ import {getRequestConfig} from 'next-intl/server';
 import {createSharedPathnamesNavigation} from 'next-intl/navigation';
 import {locales, defaultLocale} from './config';
 
-// This function can be used to get messages for a specific locale
+// Load messages for a specific locale
 export async function getMessages(locale: string) {
   try {
     return (await import(`./locales/${locale}.json`)).default;
@@ -19,31 +19,25 @@ export const {Link, redirect, usePathname, useRouter} = createSharedPathnamesNav
 });
 
 // Export a request config that next-intl will use
-export default getRequestConfig(async () => {
-  const messages = await getMessages(defaultLocale);
-  const now = new Date();
-
-  // Return the config object with the locale from requestLocale
-  return {
-    defaultLocale,
-    messages,
-    timeZone: 'Europe/Chisinau',
-    now,
-    formats: {
-      dateTime: {
-        short: {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        }
+export default getRequestConfig(async () => ({
+  messages: await getMessages(defaultLocale),
+  defaultLocale: defaultLocale,
+  locales: locales,
+  timeZone: 'Europe/Chisinau',
+  now: new Date(),
+  formats: {
+    dateTime: {
+      short: {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
       }
     },
-    getMessageFallback: (config) => {
-      // Log the missing key for debugging
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(`Missing message: ${config.key}`);
+    number: {
+      currency: {
+        style: 'currency',
+        currency: 'MDL'
       }
-      return config.key;
     }
-  };
-}); 
+  }
+})); 
