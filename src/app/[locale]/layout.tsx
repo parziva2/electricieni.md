@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -9,13 +9,13 @@ import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
-type Locale = typeof locales[number];
+type Locale = (typeof locales)[number];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-async function getMessages(locale: Locale) {
+async function getMessages(locale: string) {
   try {
     return (await import(`@/i18n/locales/${locale}.json`)).default;
   } catch (error) {
@@ -23,8 +23,9 @@ async function getMessages(locale: Locale) {
   }
 }
 
-export async function generateMetadata(props: { params: { locale: Locale } }) {
-  const { locale } = props.params;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale as Locale;
 
   if (!locales.includes(locale)) {
     notFound();
@@ -73,24 +74,21 @@ export async function generateMetadata(props: { params: { locale: Locale } }) {
   }
 }
 
-export default async function RootLayout(props: {
+export default async function RootLayout({
+  children,
+  params,
+}: {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = props.params;
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale as Locale;
 
   if (!locales.includes(locale)) {
     notFound();
   }
 
   const messages = await getMessages(locale);
-
-  // Handle the request locale
-  try {
-    unstable_setRequestLocale(locale);
-  } catch (error) {
-    console.error('Failed to set request locale:', error);
-  }
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -105,7 +103,7 @@ export default async function RootLayout(props: {
             <Navigation />
             <main className="py-10">
               <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                {props.children}
+                {children}
               </div>
             </main>
             <Footer />
