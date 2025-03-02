@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
     notFound();
   }
 
-  unstable_setRequestLocale(locale);
+  await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
   
   try {
@@ -85,7 +85,7 @@ export default async function RootLayout({
     notFound();
   }
 
-  unstable_setRequestLocale(locale);
+  await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
 
   return (
