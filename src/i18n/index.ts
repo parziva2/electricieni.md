@@ -1,5 +1,5 @@
 import {notFound} from 'next/navigation';
-import {getRequestConfig} from 'next-intl/server';
+import {getRequestConfig, unstable_setRequestLocale} from 'next-intl/server';
 import {createSharedPathnamesNavigation} from 'next-intl/navigation';
 import {locales, defaultLocale} from './config';
 
@@ -19,25 +19,28 @@ export const {Link, redirect, usePathname, useRouter} = createSharedPathnamesNav
 });
 
 // Export a request config that next-intl will use
-export default getRequestConfig(async () => ({
-  messages: await getMessages(defaultLocale),
-  defaultLocale: defaultLocale,
-  locales: locales,
-  timeZone: 'Europe/Chisinau',
-  now: new Date(),
-  formats: {
-    dateTime: {
-      short: {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      }
-    },
-    number: {
-      currency: {
-        style: 'currency',
-        currency: 'MDL'
+export default getRequestConfig(async () => {
+  // Set the default locale
+  await unstable_setRequestLocale(defaultLocale);
+  
+  return {
+    messages: await getMessages(defaultLocale),
+    timeZone: 'Europe/Chisinau',
+    now: new Date(),
+    formats: {
+      dateTime: {
+        short: {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }
+      },
+      number: {
+        currency: {
+          style: 'currency',
+          currency: 'MDL'
+        }
       }
     }
-  }
-})); 
+  };
+}); 

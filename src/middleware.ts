@@ -21,8 +21,6 @@ export const config = {
     // Match all pathnames except for
     // - API routes (/api/*)
     // - Static files (/_next/*, /static/*, /favicon.ico, etc.)
-    '/((?!api|_next|_vercel|.*\\..*).*)',
-    // Match all localized pathnames
-    '/(ro|ru)/:path*'
+    '/((?!_next|_vercel|api|.*\\..*).*)',
   ]
 }; 
