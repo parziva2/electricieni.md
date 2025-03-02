@@ -13,28 +13,20 @@ export const {Link, redirect, usePathname, useRouter} = createSharedPathnamesNav
   defaultLocale
 });
 
-// Get messages for a specific locale
-async function getMessages(locale: string) {
-  try {
-    return (await import(`./locales/${locale}.json`)).default;
-  } catch (error) {
-    notFound();
-  }
-}
-
 // Configure request handling
 export default getRequestConfig(async ({locale}) => {
-  // Ensure we have a valid locale
   if (!locale || !locales.includes(locale as Locale)) {
-    throw new Error(`Locale ${locale} is not supported`);
+    notFound();
   }
 
-  const messages = await getMessages(locale);
-
-  return {
-    locale, // Explicitly return the locale
-    messages,
-    timeZone: 'Europe/Chisinau',
-    now: new Date()
-  };
+  try {
+    return {
+      locale,
+      messages: (await import(`./locales/${locale}.json`)).default,
+      timeZone: 'Europe/Chisinau',
+      now: new Date()
+    };
+  } catch {
+    notFound();
+  }
 }); 
