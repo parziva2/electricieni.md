@@ -5,15 +5,17 @@ import { locales, defaultLocale } from '@/i18n/config';
 export default createMiddleware({
   defaultLocale,
   locales,
-  localePrefix: 'always'
+  localePrefix: 'always',
+  // Add default locale to pathname
+  pathnames: {
+    '/': '/',
+    '/services': '/services',
+    '/about': '/about',
+    '/contact': '/contact'
+  }
 });
 
-// Specify which paths should be handled by the middleware
 export const config = {
-  matcher: [
-    // Match all paths except api, _next, static files, etc.
-    '/((?!api|_next|_vercel|.*\\..*).*)',
-    // Also match the root path
-    '/'
-  ]
+  // Skip all paths that should not be internationalized
+  matcher: ['/', '/(ro|ru)/:path*']
 }; 
