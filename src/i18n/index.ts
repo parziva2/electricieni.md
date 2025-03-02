@@ -1,24 +1,32 @@
 import {notFound} from 'next/navigation';
-import {unstable_setRequestLocale} from 'next-intl/server';
-import {locales, defaultLocale, type Locale} from './config';
+import {getRequestConfig} from 'next-intl/server';
+import {locales} from './config';
 
-async function loadMessages(locale: string) {
+// This function can be used to get messages for a specific locale
+export async function getMessages(locale: string) {
   try {
     return (await import(`./locales/${locale}.json`)).default;
-  } catch {
+  } catch (error) {
     notFound();
   }
 }
 
-export default async function getRequestConfig() {
-  try {
-    await unstable_setRequestLocale(defaultLocale);
-    return {
-      messages: await loadMessages(defaultLocale),
-      timeZone: 'Europe/Chisinau',
-      now: new Date()
-    };
-  } catch (error) {
+// Export a request config that next-intl will use
+export default getRequestConfig(async ({locale}) => {
+  // Validate that the incoming locale is supported
+  if (!locales.includes(locale as any)) {
     notFound();
   }
-} 
+
+  const messages = await getMessages(locale);
+  const now = new Date();
+
+  // Return the config object
+  return {
+    messages,
+    timeZone: 'Europe/Chisinau',
+    now,
+    // Simplified fallback that returns the key as a string
+    getMessageFallback: (config: { key: string }) => config.key
+  };
+}); 

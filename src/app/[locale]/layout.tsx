@@ -1,10 +1,11 @@
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { locales, type Locale } from '@/i18n/config';
+import { getMessages } from '@/i18n';
 import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
@@ -13,21 +14,12 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-async function getMessages(locale: Locale) {
-  try {
-    return (await import(`@/i18n/locales/${locale}.json`)).default;
-  } catch {
-    notFound();
-  }
-}
-
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
-  const { locale } = params;
-
+export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   if (!locales.includes(locale)) {
     notFound();
   }
 
+  // Set the locale for the request
   await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
   
@@ -74,17 +66,16 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 
 export default async function RootLayout({
   children,
-  params,
+  params: { locale },
 }: {
   children: React.ReactNode;
   params: { locale: Locale };
 }) {
-  const { locale } = params;
-
   if (!locales.includes(locale)) {
     notFound();
   }
 
+  // Set the locale for the request
   await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
 

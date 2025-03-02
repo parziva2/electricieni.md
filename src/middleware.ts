@@ -3,12 +3,15 @@ import { locales, defaultLocale } from './i18n/config';
 
 // This is a more stable middleware configuration
 export default createMiddleware({
-  defaultLocale,
+  // A list of all locales that are supported
   locales,
+  // Used when no locale matches
+  defaultLocale,
+  // Always use prefix for better SEO and clarity
   localePrefix: 'always',
-  // This configures the locale detection
+  // Use cookie for locale detection
   localeDetection: true,
-  // Add default locale to pathname
+  // Define all the pathnames that should be handled
   pathnames: {
     '/': '/',
     '/services': '/services',
@@ -17,7 +20,14 @@ export default createMiddleware({
   }
 });
 
-// Update the matcher configuration to be more precise
+// Match all paths except static files, api routes, etc
 export const config = {
-  matcher: ['/', '/(ro|ru)/:path*', '/((?!api|_next|_vercel|.*\\..*).*)']
+  matcher: [
+    // Match all pathnames except for
+    // - API routes (/api/*)
+    // - Static files (/_next/*, /static/*, /favicon.ico, etc.)
+    '/((?!api|_next|_vercel|.*\\..*).*)',
+    // Match all localized pathnames
+    '/(ro|ru)/:path*'
+  ]
 }; 
