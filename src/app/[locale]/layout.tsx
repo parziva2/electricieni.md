@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import Navigation from '@/components/Navigation';
@@ -10,23 +9,31 @@ import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
-type Locale = typeof locales[number];
+// Strongly type the locale parameter
+type ValidLocale = (typeof locales)[number];
 
-export function generateStaticParams() {
+// Define the layout params type
+type LayoutParams = {
+  locale: ValidLocale;
+};
+
+// Define the layout props type
+interface LayoutProps {
+  children: React.ReactNode;
+  params: LayoutParams;
+}
+
+export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata(
-  props: { params: { locale: string } }
-): Promise<Metadata> {
-  const locale = props.params.locale as Locale;
-  await unstable_setRequestLocale(locale);
-
-  if (!locales.includes(locale as Locale)) {
-    notFound();
-  }
-
+export async function generateMetadata({
+  params: { locale }
+}: {
+  params: { locale: ValidLocale };
+}) {
   try {
+    await unstable_setRequestLocale(locale);
     const t = await getTranslations('metadata');
 
     return {
@@ -68,40 +75,38 @@ export async function generateMetadata(
   }
 }
 
-interface LayoutProps {
-  children: React.ReactNode;
-  params: { locale: Locale };
-}
-
-export default async function RootLayout({ children, params }: LayoutProps) {
-  const { locale } = params;
-  await unstable_setRequestLocale(locale);
-
+export default async function RootLayout({
+  children,
+  params: { locale }
+}: LayoutProps) {
+  // Validate the locale
   if (!locales.includes(locale)) {
     notFound();
   }
 
+  let messages;
   try {
-    const messages = (await import(`@/i18n/locales/${locale}.json`)).default;
-
-    return (
-      <html lang={locale} suppressHydrationWarning>
-        <body className={inter.className} suppressHydrationWarning>
-          <NextIntlClientProvider locale={locale} messages={messages} timeZone="Europe/Chisinau">
-            <div className="min-h-screen bg-gray-100">
-              <Navigation />
-              <main className="py-10">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                  {children}
-                </div>
-              </main>
-              <Footer />
-            </div>
-          </NextIntlClientProvider>
-        </body>
-      </html>
-    );
-  } catch {
+    await unstable_setRequestLocale(locale);
+    messages = (await import(`@/i18n/locales/${locale}.json`)).default;
+  } catch (error) {
     notFound();
   }
+
+  return (
+    <html lang={locale} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
+        <NextIntlClientProvider locale={locale} messages={messages} timeZone="Europe/Chisinau">
+          <div className="min-h-screen bg-gray-100">
+            <Navigation />
+            <main className="py-10">
+              <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                {children}
+              </div>
+            </main>
+            <Footer />
+          </div>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
 } 
