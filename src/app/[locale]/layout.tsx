@@ -1,21 +1,19 @@
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { locales } from '@/i18n/request';
+import { locales, type Locale } from '@/i18n/config';
 import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
-
-type Locale = (typeof locales)[number];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-async function getMessages(locale: string) {
+async function getMessages(locale: Locale) {
   try {
     return (await import(`@/i18n/locales/${locale}.json`)).default;
   } catch (error) {
@@ -23,14 +21,14 @@ async function getMessages(locale: string) {
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale as Locale;
+export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+  const { locale } = params;
 
   if (!locales.includes(locale)) {
     notFound();
   }
 
+  await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
   
   try {
@@ -79,15 +77,15 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: Locale };
 }) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale as Locale;
+  const { locale } = params;
 
   if (!locales.includes(locale)) {
     notFound();
   }
 
+  await unstable_setRequestLocale(locale);
   const messages = await getMessages(locale);
 
   return (
