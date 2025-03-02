@@ -23,10 +23,16 @@ async function getMessages(locale: string) {
 }
 
 // Configure request handling
-export default getRequestConfig(async ({locale: _locale}) => {
-  const messages = await getMessages(_locale || defaultLocale);
+export default getRequestConfig(async ({locale}) => {
+  // Ensure we have a valid locale
+  if (!locale || !locales.includes(locale as Locale)) {
+    throw new Error(`Locale ${locale} is not supported`);
+  }
+
+  const messages = await getMessages(locale);
 
   return {
+    locale, // Explicitly return the locale
     messages,
     timeZone: 'Europe/Chisinau',
     now: new Date()
