@@ -1,33 +1,30 @@
 import {notFound} from 'next/navigation';
 import {getRequestConfig} from 'next-intl/server';
-import {createSharedPathnamesNavigation} from 'next-intl/navigation';
+import {locales, defaultLocale, type Locale} from './config';
 
-export const locales = ['ro', 'ru'] as const;
-export const defaultLocale = 'ro' as const;
-
-export type Locale = typeof locales[number];
-
-// Create shared navigation instance
-export const {Link, redirect, usePathname, useRouter} = createSharedPathnamesNavigation({
-  locales,
-  defaultLocale
-});
-
-// Configure request handling
-export default getRequestConfig(async (config) => {
-  const locale = config.locale ?? defaultLocale;
-
-  // Validate that the locale is supported
-  if (!locales.includes(locale as Locale)) {
+async function loadMessages(locale: string) {
+  try {
+    return (await import(`./locales/${locale}.json`)).default;
+  } catch (error) {
     notFound();
+  }
+}
+
+export default getRequestConfig(async ({locale}) => {
+  // Ensure we have a valid locale
+  if (!locale || !locales.includes(locale as Locale)) {
+    return {
+      locale: defaultLocale,
+      messages: await loadMessages(defaultLocale),
+      timeZone: 'Europe/Chisinau',
+      now: new Date()
+    };
   }
 
   try {
-    const messages = (await import(`./locales/${locale}.json`)).default;
-    
     return {
-      messages,
       locale,
+      messages: await loadMessages(locale),
       timeZone: 'Europe/Chisinau',
       now: new Date()
     };
