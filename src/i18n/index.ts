@@ -14,19 +14,24 @@ export const {Link, redirect, usePathname, useRouter} = createSharedPathnamesNav
 });
 
 // Configure request handling
-export default getRequestConfig(async ({locale}) => {
-  if (!locale || !locales.includes(locale as Locale)) {
+export default getRequestConfig(async (config) => {
+  const locale = config.locale ?? defaultLocale;
+
+  // Validate that the locale is supported
+  if (!locales.includes(locale as Locale)) {
     notFound();
   }
 
   try {
+    const messages = (await import(`./locales/${locale}.json`)).default;
+    
     return {
+      messages,
       locale,
-      messages: (await import(`./locales/${locale}.json`)).default,
       timeZone: 'Europe/Chisinau',
       now: new Date()
     };
-  } catch {
+  } catch (error) {
     notFound();
   }
 }); 
