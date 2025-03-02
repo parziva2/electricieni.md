@@ -87,6 +87,18 @@ export default async function RootLayout({
           messages={messages} 
           timeZone="Europe/Chisinau"
           now={new Date()}
+          formats={{
+            dateTime: {
+              short: {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+              }
+            }
+          }}
+          onError={(error) => {
+            console.error(error);
+          }}
         >
           <div className="min-h-screen bg-gray-100">
             <Navigation />

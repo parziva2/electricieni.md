@@ -9,7 +9,7 @@ export default createMiddleware({
   defaultLocale,
   // Always use prefix for better SEO and clarity
   localePrefix: 'always',
-  // Use cookie for locale detection
+  // Enable locale detection
   localeDetection: true,
   // Define all the pathnames that should be handled
   pathnames: {
