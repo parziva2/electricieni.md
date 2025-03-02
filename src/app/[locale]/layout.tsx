@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { locales, type Locale } from '@/i18n/config';
 import { getMessages } from '@/i18n';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
@@ -96,19 +97,18 @@ export default async function RootLayout({
               }
             }
           }}
-          onError={(error) => {
-            console.error(error);
-          }}
         >
-          <div className="min-h-screen bg-gray-100">
-            <Navigation />
-            <main className="py-10">
-              <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                {children}
-              </div>
-            </main>
-            <Footer />
-          </div>
+          <ErrorBoundary>
+            <div className="min-h-screen bg-gray-100">
+              <Navigation />
+              <main className="py-10">
+                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                  {children}
+                </div>
+              </main>
+              <Footer />
+            </div>
+          </ErrorBoundary>
         </NextIntlClientProvider>
       </body>
     </html>

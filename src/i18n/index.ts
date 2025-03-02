@@ -38,9 +38,12 @@ export default getRequestConfig(async () => {
         }
       }
     },
-    onError: (error) => {
-      console.error(error);
-    },
-    getMessageFallback: (config) => config.key
+    getMessageFallback: (config) => {
+      // Log the missing key for debugging
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`Missing message: ${config.key}`);
+      }
+      return config.key;
+    }
   };
 }); 
