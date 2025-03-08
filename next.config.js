@@ -1,11 +1,13 @@
-const withNextIntl = require('next-intl/plugin')();
+const { createNextIntlPlugin } = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Support both server and client component rendering
-  reactStrictMode: true,
+  // Output as a static website for better performance
+  output: 'standalone',
   
-  // Configure images
+  // Configure images for remote patterns
   images: {
     remotePatterns: [
       {
@@ -15,14 +17,16 @@ const nextConfig = {
     ],
   },
   
-  // Experimental features for better performance
+  // Experimental features
   experimental: {
-    // Use Turbopack when running dev server
-    turbo: true,
+    // Enable turbo for better development experience
+    turbo: {
+      rules: {
+        // Configure Turbopack loaders
+      },
+    },
   },
 };
 
-module.exports = withNextIntl({
-  // Other Next.js config options
-  ...nextConfig,
-}); 
+// Export the configuration with next-intl plugin
+module.exports = withNextIntl(nextConfig); 
