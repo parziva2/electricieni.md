@@ -1,16 +1,41 @@
 import { getRequestConfig } from 'next-intl/server';
-import { locales } from './config';
+import { locales, defaultLocale } from './config';
 
-export default getRequestConfig(async ({ locale }) => {
-  // Validate that the incoming locale is supported
-  if (!locales.includes(locale as any)) {
-    throw new Error(`Locale ${locale} is not supported`);
+export default getRequestConfig(async ({ requestLocale }) => {
+  // Properly handle the requestLocale promise
+  const resolvedLocale = (await requestLocale) ?? defaultLocale;
+  
+  // Validate the locale
+  if (!locales.includes(resolvedLocale as any)) {
+    throw new Error(`Locale ${resolvedLocale} is not supported`);
   }
-
+  
+  // Load messages for the locale
+  const messages = await import(`./locales/${resolvedLocale}.json`)
+    .then((module) => module.default)
+    .catch(() => {
+      throw new Error(`Could not load messages for locale: ${resolvedLocale}`);
+    });
+  
   return {
-    messages: (await import(`./locales/${locale}.json`)).default,
+    locale: resolvedLocale,
+    messages,
     timeZone: 'Europe/Chisinau',
     now: new Date(),
-    locale: locale
+    formats: {
+      dateTime: {
+        short: {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }
+      },
+      number: {
+        currency: {
+          style: 'currency',
+          currency: 'MDL'
+        }
+      }
+    }
   };
 }); 
