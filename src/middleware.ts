@@ -1,7 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import {locales, defaultLocale, pathnames} from './i18n/config';
 
-// This is a more stable middleware configuration
+// This middleware handles locale detection and routing
 export default createMiddleware({
   // A list of all locales that are supported
   locales,
@@ -20,7 +20,7 @@ export const config = {
   matcher: [
     // Match all pathnames except for
     // - API routes (/api/*)
-    // - Static files (/_next/*, /static/*, /favicon.ico, etc.)
-    '/((?!_next|_vercel|api|.*\\..*).*)',
+    // - Static files (/_next/*, /_vercel/*, /static/*, /favicon.ico, etc.)
+    '/((?!api|_next|_vercel|.*\\..*).*)',
   ]
 }; 

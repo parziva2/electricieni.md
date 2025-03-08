@@ -21,11 +21,14 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale };
 }) {
-  const p = await params;
-  const locale = p.locale;
+  const paramsObj = await params;
+  const locale = paramsObj.locale;
 
   if (!locales.includes(locale)) notFound();
+  
+  // This is required to set the locale for the request
   await unstable_setRequestLocale(locale);
+  
   const messages = await getMessages(locale);
   
   try {
@@ -75,11 +78,14 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: Locale };
 }) {
-  const p = await params;
-  const locale = p.locale;
+  const paramsObj = await params;
+  const locale = paramsObj.locale;
 
   if (!locales.includes(locale)) notFound();
+  
+  // This is required to set the locale for the request
   await unstable_setRequestLocale(locale);
+  
   const messages = await getMessages(locale);
 
   return (

@@ -1,7 +1,7 @@
 import {notFound} from 'next/navigation';
 import {getRequestConfig} from 'next-intl/server';
 import {createSharedPathnamesNavigation} from 'next-intl/navigation';
-import {locales, defaultLocale} from './config';
+import {locales, defaultLocale, pathnames} from './config';
 
 // Load messages for a specific locale
 export async function getMessages(locale: string) {
@@ -20,12 +20,17 @@ export const {Link, redirect, usePathname, useRouter} = createSharedPathnamesNav
 
 // Export a request config that next-intl will use
 export default getRequestConfig(async ({requestLocale}) => {
+  // Handle null or undefined properly
   const resolvedLocale = (await requestLocale) ?? defaultLocale;
-  const messages = await getMessages(resolvedLocale);
+  
+  // Validate the locale is supported
+  if (!locales.includes(resolvedLocale as any)) {
+    throw new Error(`Locale ${resolvedLocale} is not supported`);
+  }
   
   return {
     locale: resolvedLocale,
-    messages,
+    messages: await getMessages(resolvedLocale),
     timeZone: 'Europe/Chisinau',
     now: new Date(),
     formats: {
