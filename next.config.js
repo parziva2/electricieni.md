@@ -1,12 +1,9 @@
-// Import next-intl plugin correctly - this is the proper way to import it
-const withNextIntl = require('next-intl/plugin')();
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Output as a standalone app for better deployment
-  output: 'standalone',
+  // Enable strict mode for catching more issues during development
+  reactStrictMode: true,
   
-  // Configure images for remote patterns
+  // Configure remote images
   images: {
     remotePatterns: [
       {
@@ -15,10 +12,8 @@ const nextConfig = {
       },
     ],
   },
-  
-  // Support strict mode for better development
-  reactStrictMode: true,
 };
 
-// Apply the next-intl plugin to the Next.js config
+// Apply the next-intl plugin
+const withNextIntl = require('next-intl/plugin')();
 module.exports = withNextIntl(nextConfig); 

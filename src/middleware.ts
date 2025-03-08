@@ -1,18 +1,18 @@
 import createMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n/config';
 
-// Export a middleware that handles internationalization
+// This middleware is responsible for handling language detection and routing
 export default createMiddleware({
-  // A list of all locales that are supported
+  // List of supported locales
   locales,
-  // The default locale to fallback to
+  // Default locale to use when a locale isn't found
   defaultLocale,
-  // Always use prefix for better SEO
-  localePrefix: 'always',
+  // Always use a locale prefix in URLs for better SEO
+  localePrefix: 'always'
 });
 
-// This defines which pages will be handled by the middleware
+// Configure which routes are handled by this middleware
 export const config = {
-  // Match all paths except images, files, etc.
+  // Match all paths except api routes and static files
   matcher: ['/((?!api|_next|.*\\..*).*)']
 }; 
