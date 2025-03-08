@@ -8,14 +8,11 @@ export const metadata = {
   description: 'Professional electrical services in Moldova',
 };
 
+// This is the root layout - we don't render html/body here to avoid nesting issues
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>{children}</body>
-    </html>
-  );
+  return children;
 }

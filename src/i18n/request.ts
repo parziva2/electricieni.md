@@ -1,8 +1,8 @@
 import { getRequestConfig } from 'next-intl/server';
 import { locales, defaultLocale } from './config';
 
-export default getRequestConfig(async ({ requestLocale }) => {
-  // Properly handle the requestLocale promise
+export default getRequestConfig(async ({requestLocale}) => {
+  // Properly await the requestLocale promise
   const resolvedLocale = (await requestLocale) ?? defaultLocale;
   
   // Validate the locale
