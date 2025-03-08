@@ -19,8 +19,4 @@ const nextConfig = {
   trailingSlash: false,
 };
 
-// Use the standard plugin import method
-const withNextIntl = require('next-intl/plugin')();
-
-// Apply the plugin to the Next.js configuration
-module.exports = withNextIntl(nextConfig); 
+module.exports = nextConfig; 

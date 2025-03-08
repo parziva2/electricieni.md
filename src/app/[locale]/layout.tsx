@@ -1,7 +1,5 @@
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
-import { NextIntlClientProvider } from 'next-intl';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { locales, type Locale } from '@/i18n/config';
@@ -21,22 +19,16 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale };
 }) {
-  const paramsObj = await params;
-  const locale = paramsObj.locale;
-
+  const locale = params.locale;
   if (!locales.includes(locale)) notFound();
-  
-  // This is required to set the locale for the request
-  await unstable_setRequestLocale(locale);
   
   const messages = await getMessages(locale);
   
   try {
-    const t = await getTranslations({ locale, messages, namespace: 'metadata' });
     return {
-      title: t('title'),
-      description: t('description'),
-      keywords: t('keywords'),
+      title: messages.metadata?.title || 'Electricieni.md',
+      description: messages.metadata?.description || 'Professional electrical services in Moldova',
+      keywords: messages.metadata?.keywords,
       authors: [{ name: 'Electricieni.md' }],
       metadataBase: new URL('https://electricieni.md'),
       alternates: {
@@ -46,8 +38,8 @@ export async function generateMetadata({
         ),
       },
       openGraph: {
-        title: t('title'),
-        description: t('description'),
+        title: messages.metadata?.title || 'Electricieni.md',
+        description: messages.metadata?.description || 'Professional electrical services in Moldova',
         url: 'https://electricieni.md',
         siteName: 'Electricieni.md',
         locale: locale,
@@ -55,8 +47,8 @@ export async function generateMetadata({
       },
       twitter: {
         card: 'summary_large_image',
-        title: t('title'),
-        description: t('description'),
+        title: messages.metadata?.title || 'Electricieni.md',
+        description: messages.metadata?.description || 'Professional electrical services in Moldova',
       },
       robots: {
         index: true,
@@ -78,50 +70,23 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: Locale };
 }) {
-  const paramsObj = await params;
-  const locale = paramsObj.locale;
-
+  const locale = params.locale;
   if (!locales.includes(locale)) notFound();
-  
-  // This is required to set the locale for the request
-  await unstable_setRequestLocale(locale);
   
   const messages = await getMessages(locale);
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <NextIntlClientProvider 
-          locale={locale} 
-          messages={messages}
-          timeZone="Europe/Chisinau"
-          now={new Date()}
-          formats={{
-            dateTime: {
-              short: {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric'
-              }
-            },
-            number: {
-              currency: {
-                style: 'currency',
-                currency: 'MDL'
-              }
-            }
-          }}
-        >
-          <div className="min-h-screen bg-gray-100">
-            <Navigation />
-            <main className="py-10">
-              <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                {children}
-              </div>
-            </main>
-            <Footer />
-          </div>
-        </NextIntlClientProvider>
+        <div className="min-h-screen bg-gray-100">
+          <Navigation />
+          <main className="py-10">
+            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              {children}
+            </div>
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

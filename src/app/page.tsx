@@ -14,38 +14,14 @@ export function generateStaticParams() {
 // Simple static page that redirects to the default locale
 export default function RootPage() {
   return (
-    <html lang="en">
+    <html>
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="refresh" content={`0;url=/${defaultLocale}`} />
         <title>Redirecting...</title>
-        <style dangerouslySetInnerHTML={{ __html: `
-          body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-            background-color: #f5f5f5;
-          }
-          a {
-            color: #0070f3;
-            text-decoration: none;
-          }
-          a:hover {
-            text-decoration: underline;
-          }
-        `}} />
       </head>
       <body>
-        <h1>Redirecting...</h1>
         <p>
-          If you are not redirected automatically, please{' '}
-          <a href={`/${defaultLocale}`}>click here</a>.
+          <a href={`/${defaultLocale}`}>Click here if you are not redirected automatically</a>
         </p>
       </body>
     </html>
