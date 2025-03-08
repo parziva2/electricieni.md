@@ -1,14 +1,11 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "^/$", "status": 307, "headers": { "Location": "/ro" } },
-    { "src": "/favicon.ico", "dest": "/favicon.ico" },
-    { "src": "/_next/(.*)", "dest": "/_next/$1" },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(ro|ru)/(.*)", "dest": "/$1/$2" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "status": 307, "headers": { "Location": "/ro/$1" } }
-  ],
+  "cleanUrls": true,
   "trailingSlash": false,
-  "cleanUrls": true
+  "redirects": [
+    { "source": "/", "destination": "/ro", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/(ro|ru)/:path*", "destination": "/:path*" }
+  ]
 } 

@@ -19,10 +19,6 @@ const nextConfig = {
   
   // This helps with i18n routes
   trailingSlash: false,
-  
-  // Disable middleware since it's not compatible with static export
-  skipMiddlewareUrlNormalization: true,
-  skipTrailingSlashRedirect: true,
 };
 
 // Using next-intl with minimal configuration

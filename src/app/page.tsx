@@ -11,18 +11,19 @@ export function generateStaticParams() {
   return [];
 }
 
-// For static export, we only use server-side redirects in vercel.json
-// This component is just a fallback
+// Static page for redirecting
 export default function RootPage() {
-  // Show a basic HTML redirect in case the vercel.json redirect doesn't work
+  // Show a basic HTML redirect for static export
   return (
     <html>
       <head>
         <meta httpEquiv="refresh" content={`0;url=/${defaultLocale}`} />
-        <title>Redirecting...</title>
+        <title>Redirecting to {defaultLocale}</title>
       </head>
       <body>
-        <p>Redirecting to <a href={`/${defaultLocale}`}>default language version</a>...</p>
+        <p>
+          Redirecting to <a href={`/${defaultLocale}`}>{defaultLocale}</a>...
+        </p>
       </body>
     </html>
   );
