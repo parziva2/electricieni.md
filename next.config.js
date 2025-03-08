@@ -1,9 +1,3 @@
-// Import the createNextIntlPlugin function
-const { createNextIntlPlugin } = require('next-intl/plugin');
-
-// Create the next-intl plugin with explicit path
-const withNextIntl = createNextIntlPlugin('./src/i18n/i18n-config.js');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // For static export
@@ -24,6 +18,9 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
 };
+
+// Use the standard plugin import method
+const withNextIntl = require('next-intl/plugin')();
 
 // Apply the plugin to the Next.js configuration
 module.exports = withNextIntl(nextConfig); 
