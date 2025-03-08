@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/(ro|ru)(.*)", "dest": "/$1$2" },
+    { "handle": "filesystem" },
+    { "src": "/", "dest": "/ro" },
+    { "src": "/(.*)", "dest": "/ro/$1" }
+  ]
+} 
