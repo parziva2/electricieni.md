@@ -1,10 +1,9 @@
-const { createNextIntlPlugin } = require('next-intl/plugin');
-
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+// Import next-intl plugin correctly - this is the proper way to import it
+const withNextIntl = require('next-intl/plugin')();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Output as a static website for better performance
+  // Output as a standalone app for better deployment
   output: 'standalone',
   
   // Configure images for remote patterns
@@ -17,16 +16,9 @@ const nextConfig = {
     ],
   },
   
-  // Experimental features
-  experimental: {
-    // Enable turbo for better development experience
-    turbo: {
-      rules: {
-        // Configure Turbopack loaders
-      },
-    },
-  },
+  // Support strict mode for better development
+  reactStrictMode: true,
 };
 
-// Export the configuration with next-intl plugin
+// Apply the next-intl plugin to the Next.js config
 module.exports = withNextIntl(nextConfig); 

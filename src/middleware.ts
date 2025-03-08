@@ -1,36 +1,18 @@
 import createMiddleware from 'next-intl/middleware';
-import { locales, defaultLocale, pathnames } from './i18n/config';
+import { locales, defaultLocale } from './i18n/config';
 
-// Create a robust middleware for handling internationalization
+// Export a middleware that handles internationalization
 export default createMiddleware({
   // A list of all locales that are supported
   locales,
-  
-  // Used when no locale matches
+  // The default locale to fallback to
   defaultLocale,
-  
-  // Always use prefix for better SEO and clarity
+  // Always use prefix for better SEO
   localePrefix: 'always',
-  
-  // Enable locale detection from the Accept-Language header
-  localeDetection: true,
-  
-  // Define all the pathnames that should be handled
-  pathnames
 });
 
-// Match all paths except for:
-// 1. Static files (/_next/*, etc.)
-// 2. API routes (/api/*)
-// 3. Files with extensions (*.jpg, *.png, etc.)
+// This defines which pages will be handled by the middleware
 export const config = {
-  matcher: [
-    // Match all request paths except for the ones starting with:
-    // - api (API routes)
-    // - _next/static (static files)
-    // - _next/image (image optimization files)
-    // - favicon.ico (favicon file)
-    // - and files with extensions (.jpg, .png, etc.)
-    '/((?!api|_next/static|_next/image|favicon\\.|\\.[^/]+$).*)'
-  ]
+  // Match all paths except images, files, etc.
+  matcher: ['/((?!api|_next|.*\\..*).*)']
 }; 

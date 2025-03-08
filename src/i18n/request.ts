@@ -2,49 +2,32 @@ import { getRequestConfig } from 'next-intl/server';
 import { locales, defaultLocale } from './config';
 
 // This configuration is used by the Next.js plugin
-export default getRequestConfig(async ({locale: _locale, requestLocale}) => {
-  // IMPORTANT: We need to await requestLocale to get the resolved locale
-  const locale = await requestLocale;
+export default getRequestConfig(async ({ locale, requestLocale }) => {
+  // Use the requestLocale promise, await it properly
+  let resolvedLocale = await requestLocale;
   
-  if (!locale) {
-    console.warn('No locale found, falling back to default locale');
+  // Fall back to default locale if no locale was determined
+  if (!resolvedLocale) {
+    resolvedLocale = defaultLocale;
   }
   
-  // Always ensure we have a valid locale
-  const resolvedLocale = locale || defaultLocale;
-  
-  // Validate that it's a supported locale
-  if (!locales.includes(resolvedLocale as any)) {
-    console.warn(`Locale ${resolvedLocale} is not supported, falling back to ${defaultLocale}`);
-    return {
-      locale: defaultLocale,
-      messages: (await import(`./locales/${defaultLocale}.json`)).default,
-      timeZone: 'Europe/Chisinau',
-      now: new Date()
-    };
+  // Load the messages for the locale
+  let messages;
+  try {
+    messages = (await import(`./locales/${resolvedLocale}.json`)).default;
+  } catch (error) {
+    console.error(`Could not load messages for ${resolvedLocale}`, error);
+    // Fall back to default locale messages if the requested locale doesn't exist
+    messages = (await import(`./locales/${defaultLocale}.json`)).default;
   }
   
   return {
-    // IMPORTANT: Must return the resolved locale
+    // Return the resolved locale - this is required
     locale: resolvedLocale,
-    messages: (await import(`./locales/${resolvedLocale}.json`)).default,
-    timeZone: 'Europe/Chisinau',
-    // Don't use Date.now() directly to avoid hydration errors
+    messages,
+    // Use static timestamp to avoid hydration errors
     now: new Date(),
-    formats: {
-      dateTime: {
-        short: {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        }
-      },
-      number: {
-        currency: {
-          style: 'currency',
-          currency: 'MDL'
-        }
-      }
-    }
+    // Set timezone for proper date handling
+    timeZone: 'Europe/Chisinau'
   };
 }); 
