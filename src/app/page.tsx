@@ -13,16 +13,16 @@ export function generateStaticParams() {
 
 // Static page for redirecting
 export default function RootPage() {
-  // Show a basic HTML redirect for static export
+  // Simple static HTML that redirects to the default locale
   return (
     <html>
       <head>
         <meta httpEquiv="refresh" content={`0;url=/${defaultLocale}`} />
-        <title>Redirecting to {defaultLocale}</title>
+        <title>Redirecting...</title>
       </head>
       <body>
         <p>
-          Redirecting to <a href={`/${defaultLocale}`}>{defaultLocale}</a>...
+          <a href={`/${defaultLocale}`}>Click here if you are not redirected automatically</a>
         </p>
       </body>
     </html>

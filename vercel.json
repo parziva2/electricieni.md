@@ -1,11 +1,14 @@
 {
-  "version": 2,
-  "cleanUrls": true,
-  "trailingSlash": false,
   "redirects": [
     { "source": "/", "destination": "/ro", "permanent": false }
   ],
-  "rewrites": [
-    { "source": "/(ro|ru)/:path*", "destination": "/:path*" }
-  ]
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ],
+  "trailingSlash": false
 } 

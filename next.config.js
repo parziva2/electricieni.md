@@ -1,9 +1,15 @@
+// Import the createNextIntlPlugin function
+const { createNextIntlPlugin } = require('next-intl/plugin');
+
+// Create the next-intl plugin with explicit path
+const withNextIntl = createNextIntlPlugin('./src/i18n/i18n-config.js');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // For static export
   output: 'export',
   
-  // Disable image optimization since it's not compatible with static export
+  // Disable image optimization for static export
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -14,13 +20,10 @@ const nextConfig = {
     ],
   },
   
-  // For better development experience
+  // Basic configuration
   reactStrictMode: true,
-  
-  // This helps with i18n routes
   trailingSlash: false,
 };
 
-// Using next-intl with minimal configuration
-const withNextIntl = require('next-intl/plugin')();
+// Apply the plugin to the Next.js configuration
 module.exports = withNextIntl(nextConfig); 
