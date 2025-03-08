@@ -1,18 +1,29 @@
-import { redirect } from 'next/navigation';
 import { defaultLocale } from '@/i18n/config';
 
-// Force the page to be dynamic to ensure redirection always works
-export const dynamic = 'force-dynamic';
+// This page is static and only used for redirects
+export const dynamic = 'force-static';
 
-// Added revalidate to ensure the redirect works in static exports
-export const revalidate = 0;
+// No revalidation needed
+export const revalidate = false;
 
-// Adding generateStaticParams to ensure the page is included in the build
+// This helps Next.js understand the structure for static export
 export function generateStaticParams() {
   return [];
 }
 
-// Redirect to the default locale
+// For static export, we only use server-side redirects in vercel.json
+// This component is just a fallback
 export default function RootPage() {
-  redirect(`/${defaultLocale}`);
+  // Show a basic HTML redirect in case the vercel.json redirect doesn't work
+  return (
+    <html>
+      <head>
+        <meta httpEquiv="refresh" content={`0;url=/${defaultLocale}`} />
+        <title>Redirecting...</title>
+      </head>
+      <body>
+        <p>Redirecting to <a href={`/${defaultLocale}`}>default language version</a>...</p>
+      </body>
+    </html>
+  );
 }

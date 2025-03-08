@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable strict mode for catching more issues during development
-  reactStrictMode: true,
+  // For static export
+  output: 'export',
   
-  // Configure remote images
+  // Disable image optimization since it's not compatible with static export
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -13,16 +14,17 @@ const nextConfig = {
     ],
   },
   
-  // This is critical for Vercel deployments with i18n
+  // For better development experience
+  reactStrictMode: true,
+  
+  // This helps with i18n routes
   trailingSlash: false,
   
-  // Ensure output is optimized for Vercel
-  output: 'export',
-  
-  // Disable image optimization for static export
-  unoptimized: true,
+  // Disable middleware since it's not compatible with static export
+  skipMiddlewareUrlNormalization: true,
+  skipTrailingSlashRedirect: true,
 };
 
-// Apply the next-intl plugin
+// Using next-intl with minimal configuration
 const withNextIntl = require('next-intl/plugin')();
 module.exports = withNextIntl(nextConfig); 

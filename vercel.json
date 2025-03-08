@@ -1,9 +1,14 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/(ro|ru)(.*)", "dest": "/$1$2" },
+    { "src": "^/$", "status": 307, "headers": { "Location": "/ro" } },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
+    { "src": "/_next/(.*)", "dest": "/_next/$1" },
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(ro|ru)/(.*)", "dest": "/$1/$2" },
     { "handle": "filesystem" },
-    { "src": "/", "dest": "/ro" },
-    { "src": "/(.*)", "dest": "/ro/$1" }
-  ]
+    { "src": "/(.*)", "status": 307, "headers": { "Location": "/ro/$1" } }
+  ],
+  "trailingSlash": false,
+  "cleanUrls": true
 } 
