@@ -15,10 +15,11 @@ export function generateStaticParams() {
 
 // Generate metadata for the page
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
   params: { locale: Locale };
 }) {
+  const locale = await Promise.resolve(params.locale);
   if (!locales.includes(locale)) notFound();
   
   const messages = await getMessages(locale);
@@ -64,11 +65,12 @@ export async function generateMetadata({
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
   params: { locale: Locale };
 }) {
+  const locale = await Promise.resolve(params.locale);
   if (!locales.includes(locale)) notFound();
   
   const messages = await getMessages(locale);
