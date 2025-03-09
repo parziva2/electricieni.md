@@ -1,87 +1,75 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { BoltIcon, HomeIcon, BuildingOfficeIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
-import { CheckCircleIcon } from '@heroicons/react/20/solid';
-import CallToAction from '@/components/CallToAction';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { getMessages, t } from '@/i18n';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export default function Services() {
-  const t = useTranslations('services');
+  const pathname = usePathname();
+  const currentLocale = pathname?.split('/')[1] || '';
+  const [messages, setMessages] = useState<any>(null);
 
-  const services = [
-    {
-      name: t('residential.title'),
-      description: t('residential.description'),
-      icon: HomeIcon,
-      features: t.raw('residential.features') as string[],
-    },
-    {
-      name: t('commercial.title'),
-      description: t('commercial.description'),
-      icon: BuildingOfficeIcon,
-      features: t.raw('commercial.features') as string[],
-    },
-    {
-      name: t('maintenance.title'),
-      description: t('maintenance.description'),
-      icon: WrenchScrewdriverIcon,
-      features: t.raw('maintenance.features') as string[],
-    },
-    {
-      name: t('emergency.title'),
-      description: t('emergency.description'),
-      icon: BoltIcon,
-      features: t.raw('emergency.features') as string[],
-    },
-  ];
+  useEffect(() => {
+    if (currentLocale) {
+      getMessages(currentLocale).then(setMessages);
+    }
+  }, [currentLocale]);
+
+  if (!messages) return null;
 
   return (
-    <>
-      <div className="bg-white py-24 sm:py-32">
+    <ErrorBoundary>
+      <div className="bg-white py-12 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{t('title')}</h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">{t('subtitle')}</p>
+          <div className="mx-auto max-w-2xl lg:text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              {t(messages, 'services.pageTitle')}
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-gray-600">
+              {t(messages, 'services.pageDescription')}
+            </p>
           </div>
+
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-            {services.map((service, index) => (
-              <div key={service.name} className={`relative ${index !== 0 ? 'mt-32' : ''}`}>
-                {index !== 0 && (
-                  <div className="absolute inset-x-0 -top-16 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-gray-200" />
-                  </div>
-                )}
-                <div className="relative flex items-center">
+            {/* Services grid */}
+            <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+              {messages.services.items.map((service: any) => (
+                <div key={service.name} className="flex flex-col">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
-                    <service.icon className="h-6 w-6 text-white" aria-hidden="true" />
+                    <span className="text-white text-xl">{service.icon || '⚡'}</span>
                   </div>
-                  <h3 className="ml-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                    {service.name}
-                  </h3>
-                </div>
-                <div className="mt-8 lg:grid lg:grid-cols-2 lg:gap-8">
-                  <div className="relative lg:col-start-1">
-                    <p className="text-lg text-gray-500">{service.description}</p>
-                  </div>
-                  <div className="mt-10 lg:col-start-2 lg:mt-0">
-                    <ul role="list" className="space-y-4">
-                      {service.features.map((feature: string) => (
-                        <li key={feature} className="flex items-start">
-                          <div className="flex-shrink-0">
-                            <CheckCircleIcon className="h-6 w-6 text-green-500" aria-hidden="true" />
+                  <h2 className="mt-6 text-2xl font-bold text-gray-900">{service.name}</h2>
+                  <p className="mt-4 flex-1 text-base leading-7 text-gray-600">{service.description}</p>
+                  
+                  <div className="mt-8">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{t(messages, 'services.featuresTitle')}</h3>
+                    <ul className="space-y-3">
+                      {service.features?.map((feature: string) => (
+                        <li key={feature} className="flex gap-x-3">
+                          <div className="h-6 w-6 flex-none text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
                           </div>
-                          <p className="ml-3 text-base leading-6 text-gray-600">{feature}</p>
+                          {feature}
                         </li>
                       ))}
                     </ul>
                   </div>
+
+                  {service.pricing && (
+                    <div className="mt-8">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">{t(messages, 'services.pricingTitle')}</h3>
+                      <p className="text-xl font-bold text-blue-600">{service.pricing}</p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      <CallToAction />
-    </>
+    </ErrorBoundary>
   );
 } 
