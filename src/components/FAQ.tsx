@@ -1,6 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { getMessages, t } from '@/i18n';
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
@@ -9,19 +11,29 @@ function classNames(...classes: string[]) {
 }
 
 export default function FAQ() {
-  const t = useTranslations('faq');
+  const pathname = usePathname();
+  const currentLocale = pathname?.split('/')[1] || '';
+  const [messages, setMessages] = useState<any>(null);
 
-  const faqs = t.raw('items') as Array<{ question: string; answer: string }>;
+  useEffect(() => {
+    if (currentLocale) {
+      getMessages(currentLocale).then(setMessages);
+    }
+  }, [currentLocale]);
+
+  if (!messages) return null;
+
+  const faqs = messages.faq?.items || [];
 
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
         <div className="mx-auto max-w-4xl divide-y divide-gray-900/10">
           <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-            {t('title')}
+            {t(messages, 'faq.title')}
           </h2>
           <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
-            {faqs.map((faq, index) => (
+            {faqs.map((faq: { question: string; answer: string }, index: number) => (
               <Disclosure as="div" key={index} className="pt-6">
                 {({ open }) => (
                   <>

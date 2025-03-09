@@ -1,7 +1,11 @@
+import { notFound } from 'next/navigation';
+import { createSharedPathnamesNavigation } from 'next-intl/navigation';
 import { locales, defaultLocale } from './config';
 
 /**
  * Loads messages for a specific locale
+ * @param locale The locale to load messages for
+ * @returns The messages for the locale
  */
 export async function getMessages(locale: string) {
   try {
@@ -13,19 +17,42 @@ export async function getMessages(locale: string) {
 }
 
 /**
+ * Create shared navigation utilities for use throughout the app
+ */
+export const { Link, redirect, usePathname, useRouter } = createSharedPathnamesNavigation({
+  locales,
+  defaultLocale
+});
+
+/**
  * Simple translation function
  */
 export function t(messages: any, key: string, params?: Record<string, string>) {
-  let message = key.split('.').reduce((obj, k) => obj?.[k], messages);
-  if (!message) return key;
+  if (!messages) return key;
+
+  // Split the key by dots to access nested properties
+  const parts = key.split('.');
+  let result = messages;
   
-  if (params) {
-    Object.entries(params).forEach(([k, v]) => {
-      message = message.replace(`{${k}}`, v);
-    });
+  // Traverse the messages object
+  for (const part of parts) {
+    if (!result || typeof result !== 'object') return key;
+    result = result[part];
+    if (result === undefined) return key;
   }
   
-  return message;
+  if (typeof result !== 'string') return key;
+  
+  // Replace parameters
+  if (params) {
+    let text = result;
+    Object.entries(params).forEach(([paramKey, value]) => {
+      text = text.replace(`{${paramKey}}`, value);
+    });
+    return text;
+  }
+  
+  return result;
 }
 
 /**
