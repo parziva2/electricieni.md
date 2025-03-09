@@ -8,7 +8,7 @@ import '../globals.css';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
-// Generate static params for all locales
+// Generate static params for all locales - this is crucial for static export
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
@@ -19,16 +19,18 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale };
 }) {
-  const locale = await Promise.resolve(params.locale);
+  // Safely get locale
+  const locale = params.locale;
   if (!locales.includes(locale)) notFound();
   
+  // Get messages for metadata
   const messages = await getMessages(locale);
   
   try {
     return {
       title: messages.metadata?.title || 'Electricieni.md',
       description: messages.metadata?.description || 'Professional electrical services in Moldova',
-      keywords: messages.metadata?.keywords,
+      keywords: messages.metadata?.keywords || 'electrician, electrical services, Moldova',
       authors: [{ name: 'Electricieni.md' }],
       metadataBase: new URL('https://electricieni.md'),
       alternates: {
@@ -45,17 +47,9 @@ export async function generateMetadata({
         locale: locale,
         type: 'website',
       },
-      twitter: {
-        card: 'summary_large_image',
-        title: messages.metadata?.title || 'Electricieni.md',
-        description: messages.metadata?.description || 'Professional electrical services in Moldova',
-      },
-      robots: {
-        index: true,
-        follow: true,
-      },
     };
-  } catch {
+  } catch (error) {
+    console.error('Error generating metadata:', error);
     return {
       title: 'Electricieni.md',
       description: 'Professional electrical services in Moldova',
@@ -63,29 +57,28 @@ export async function generateMetadata({
   }
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
   params: { locale: Locale };
 }) {
-  const locale = await Promise.resolve(params.locale);
+  // Safely get locale
+  const locale = params.locale;
   if (!locales.includes(locale)) notFound();
-  
-  const messages = await getMessages(locale);
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+    <html lang={locale}>
+      <body className={inter.className}>
         <div className="min-h-screen bg-gray-100">
-          <Navigation />
+          <Navigation locale={locale} />
           <main className="py-10">
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
               {children}
             </div>
           </main>
-          <Footer />
+          <Footer locale={locale} />
         </div>
       </body>
     </html>

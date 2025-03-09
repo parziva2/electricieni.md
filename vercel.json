@@ -1,5 +1,4 @@
 {
-  "redirects": [
-    { "source": "/", "destination": "/ro" }
-  ]
+  "version": 2,
+  "cleanUrls": true
 } 

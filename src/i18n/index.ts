@@ -1,33 +1,39 @@
-import { notFound } from 'next/navigation';
-import { createSharedPathnamesNavigation } from 'next-intl/navigation';
 import { locales, defaultLocale } from './config';
+
+// Simple message cache to avoid repeated imports
+const messageCache: Record<string, any> = {};
 
 /**
  * Loads messages for a specific locale
- * @param locale The locale to load messages for
- * @returns The messages for the locale
  */
 export async function getMessages(locale: string) {
+  // Use cached messages if available
+  if (messageCache[locale]) {
+    return messageCache[locale];
+  }
+
   try {
-    return (await import(`./locales/${locale}.json`)).default;
+    // Load messages for requested locale
+    const messages = (await import(`./locales/${locale}.json`)).default;
+    messageCache[locale] = messages;
+    return messages;
   } catch (error) {
-    console.error(`Could not load messages for ${locale}`);
-    return (await import(`./locales/${defaultLocale}.json`)).default;
+    console.error(`Could not load messages for ${locale}, falling back to ${defaultLocale}`);
+    
+    // Fall back to default locale
+    if (locale !== defaultLocale) {
+      return getMessages(defaultLocale);
+    }
+    
+    // If even default locale fails, return empty object
+    return {};
   }
 }
 
 /**
- * Create shared navigation utilities for use throughout the app
- */
-export const { Link, redirect, usePathname, useRouter } = createSharedPathnamesNavigation({
-  locales,
-  defaultLocale
-});
-
-/**
  * Simple translation function
  */
-export function t(messages: any, key: string, params?: Record<string, string>) {
+export function t(messages: any, key: string, params?: Record<string, string>): string {
   if (!messages) return key;
 
   // Split the key by dots to access nested properties
@@ -68,5 +74,5 @@ export function getLocaleFromPathname(pathname: string): string {
  */
 export function formatURL(path: string, locale: string): string {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  return `/${locale}${cleanPath}`;
+  return `/${locale}${cleanPath === '/' ? '' : cleanPath}`;
 } 

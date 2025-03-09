@@ -1,23 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import { getMessages, t } from '@/i18n';
+import { Locale } from '@/i18n/config';
 import Link from 'next/link';
 import { PhoneIcon } from '@heroicons/react/24/outline';
 
 const PHONE_NUMBER = '+373 079665665';
 
-export default function CallToAction() {
-  const pathname = usePathname();
-  const currentLocale = pathname?.split('/')[1] || '';
+interface CallToActionProps {
+  locale: Locale;
+}
+
+export default function CallToAction({ locale }: CallToActionProps) {
   const [messages, setMessages] = useState<any>(null);
 
   useEffect(() => {
-    if (currentLocale) {
-      getMessages(currentLocale).then(setMessages);
-    }
-  }, [currentLocale]);
+    // Load messages for this locale
+    getMessages(locale).then(setMessages);
+  }, [locale]);
 
   if (!messages) return null;
 
@@ -33,7 +34,7 @@ export default function CallToAction() {
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
-              href={`/${currentLocale}/contact`}
+              href={`/${locale}/contact`}
               className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-blue-600 shadow-sm hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               {t(messages, 'cta.button')}

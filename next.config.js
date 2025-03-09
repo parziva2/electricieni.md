@@ -1,22 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // For static export
   output: 'export',
-  
-  // Disable image optimization for static export
+  trailingSlash: false,
   images: {
     unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-    ],
   },
-  
-  // Basic configuration
-  reactStrictMode: true,
-  trailingSlash: false,
-};
+  // No custom plugins or advanced features
+}
 
-module.exports = nextConfig; 
+module.exports = nextConfig 

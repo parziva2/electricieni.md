@@ -1,25 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import { getMessages, t } from '@/i18n';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { PhoneIcon } from '@heroicons/react/24/outline';
+import { Locale } from '@/i18n/config';
 
 const PHONE_NUMBER = '+373 079665665';
 
-export default function HeroSection() {
-  const pathname = usePathname();
-  const currentLocale = pathname?.split('/')[1] || '';
+interface HeroSectionProps {
+  locale: Locale;
+}
+
+export default function HeroSection({ locale }: HeroSectionProps) {
   const [messages, setMessages] = useState<any>(null);
 
   useEffect(() => {
-    if (currentLocale) {
-      getMessages(currentLocale).then(setMessages);
-    }
-  }, [currentLocale]);
+    // Load messages for this locale
+    getMessages(locale).then(setMessages);
+  }, [locale]);
 
   if (!messages) return null;
 
@@ -54,7 +55,7 @@ export default function HeroSection() {
             </p>
             <div className="mt-8 flex items-center gap-x-6">
               <Link
-                href={`/${currentLocale}/contact`}
+                href={`/${locale}/contact`}
                 className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 {t(messages, 'hero.cta')}

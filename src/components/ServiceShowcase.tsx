@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import { getMessages, t } from '@/i18n';
 import { motion } from 'framer-motion';
+import { Locale } from '@/i18n/config';
 import {
   BoltIcon,
   HomeIcon,
@@ -11,16 +11,17 @@ import {
   WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
 
-export default function ServiceShowcase() {
-  const pathname = usePathname();
-  const currentLocale = pathname?.split('/')[1] || '';
+interface ServiceShowcaseProps {
+  locale: Locale;
+}
+
+export default function ServiceShowcase({ locale }: ServiceShowcaseProps) {
   const [messages, setMessages] = useState<any>(null);
 
   useEffect(() => {
-    if (currentLocale) {
-      getMessages(currentLocale).then(setMessages);
-    }
-  }, [currentLocale]);
+    // Load messages for this locale
+    getMessages(locale).then(setMessages);
+  }, [locale]);
 
   if (!messages) return null;
   

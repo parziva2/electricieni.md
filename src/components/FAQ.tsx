@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import { getMessages, t } from '@/i18n';
+import { Locale } from '@/i18n/config';
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
@@ -10,16 +10,17 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function FAQ() {
-  const pathname = usePathname();
-  const currentLocale = pathname?.split('/')[1] || '';
+interface FAQProps {
+  locale: Locale;
+}
+
+export default function FAQ({ locale }: FAQProps) {
   const [messages, setMessages] = useState<any>(null);
 
   useEffect(() => {
-    if (currentLocale) {
-      getMessages(currentLocale).then(setMessages);
-    }
-  }, [currentLocale]);
+    // Load messages for this locale
+    getMessages(locale).then(setMessages);
+  }, [locale]);
 
   if (!messages) return null;
 
