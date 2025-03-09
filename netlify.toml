@@ -1,0 +1,36 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+  base = "/"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/*"
+  to = "/ro/:splat"
+  status = 302
+  force = true
+  conditions = {Language = ["ro"]}
+
+[[redirects]]
+  from = "/*"
+  to = "/ru/:splat"
+  status = 302
+  force = true
+  conditions = {Language = ["ru"]}
+
+[[redirects]]
+  from = "/"
+  to = "/ro"
+  status = 302
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cache-Control = "public, max-age=3600, must-revalidate" 
