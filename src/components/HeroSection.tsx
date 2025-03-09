@@ -11,19 +11,16 @@ import { Locale } from '@/i18n/config';
 const PHONE_NUMBER = '+373 079665665';
 
 interface HeroSectionProps {
-  locale: Locale;
+  messages: {
+    hero: {
+      title: string;
+      subtitle: string;
+      cta: string;
+    };
+  };
 }
 
-export default function HeroSection({ locale }: HeroSectionProps) {
-  const [messages, setMessages] = useState<any>(null);
-
-  useEffect(() => {
-    // Load messages for this locale
-    getMessages(locale).then(setMessages);
-  }, [locale]);
-
-  if (!messages) return null;
-
+export default function HeroSection({ messages }: HeroSectionProps) {
   return (
     <div className="relative isolate px-6 pt-14 lg:px-8">
       <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
