@@ -11,57 +11,43 @@ function classNames(...classes: string[]) {
 }
 
 interface FAQProps {
-  locale: Locale;
+  messages: {
+    faq: {
+      title: string;
+      items: Array<{
+        question: string;
+        answer: string;
+      }>;
+    };
+  };
 }
 
-export default function FAQ({ locale }: FAQProps) {
-  const [messages, setMessages] = useState<any>(null);
-
-  useEffect(() => {
-    // Load messages for this locale
-    getMessages(locale).then(setMessages);
-  }, [locale]);
-
-  if (!messages) return null;
-
-  const faqs = messages.faq?.items || [];
-
+const FAQ = ({ messages }: FAQProps) => {
   return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
-        <div className="mx-auto max-w-4xl divide-y divide-gray-900/10">
-          <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-            {t(messages, 'faq.title')}
+    <div className="bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl lg:text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            {messages.faq.title}
           </h2>
-          <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
-            {faqs.map((faq: { question: string; answer: string }, index: number) => (
-              <Disclosure as="div" key={index} className="pt-6">
-                {({ open }) => (
-                  <>
-                    <dt>
-                      <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900">
-                        <span className="text-base font-semibold leading-7">{faq.question}</span>
-                        <span className="ml-6 flex h-7 items-center">
-                          <ChevronDownIcon
-                            className={classNames(
-                              open ? '-rotate-180' : 'rotate-0',
-                              'h-6 w-6 transform transition duration-200'
-                            )}
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Disclosure.Button>
-                    </dt>
-                    <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                      <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
-                    </Disclosure.Panel>
-                  </>
-                )}
-              </Disclosure>
+        </div>
+        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
+            {messages.faq.items.map((item, index) => (
+              <div key={index} className="flex flex-col">
+                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                  {item.question}
+                </dt>
+                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                  <p className="flex-auto">{item.answer}</p>
+                </dd>
+              </div>
             ))}
           </dl>
         </div>
       </div>
     </div>
   );
-} 
+};
+
+export default FAQ; 
